@@ -21,17 +21,17 @@ services:
     entrypoint: sh -c 'start-notebook.sh --NotebookApp.token=$$JUPYTER_PASSWORD'
 
   # Visualization
-  superset:
-    container_name: "digipro-analytics_superset"
-    restart: "always"
-    image: tylerfowler/superset:0.24
-    depends_on:
-        - postgres
-    env_file:
-        - ./config/superset_container.env
-        - ./config/superset_database.env
-    ports:
-      - 8088:8088
+  # superset:
+  #   container_name: "digipro-analytics_superset"
+  #   restart: "always"
+  #   image: tylerfowler/superset:0.24
+  #   depends_on:
+  #       - postgres
+  #   env_file:
+  #       - ./config/superset_container.env
+  #       - ./config/superset_database.env
+  #   ports:
+  #     - 8088:8088
 
   # Misc Storage
   postgres:
@@ -48,6 +48,27 @@ services:
       - ./services/postgres/:/docker-entrypoint-initdb.d/
     ports:
       - 5432:5432
+
+#  visual analytics and Visualization
+
+  metabase:
+    image: metabase/metabase
+    restart: always
+    ports:
+      - 3001:3000
+    volumes:
+      - ./metabase-data:/metabase-data
+    environment:
+      MB_DB_TYPE: postgres
+      MB_DB_DBNAME: digipro
+      MB_DB_PORT: 5432
+      MB_DB_USER: digipro
+      MB_DB_PASS: digipro
+      MB_DB_HOST: postgres
+    depends_on:
+      - postgres
+    links:
+      - postgres
 
   # Scheduling
   airflow:
