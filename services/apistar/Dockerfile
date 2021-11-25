@@ -1,5 +1,4 @@
 FROM python:3.6-alpine
-MAINTAINER Joshua Goerner <joshua.goerner@gmail.com>
 
 WORKDIR /usr/src/app
 
