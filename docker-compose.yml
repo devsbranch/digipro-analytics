@@ -55,7 +55,7 @@ services:
     image: metabase/metabase
     restart: always
     ports:
-      - 3001:3000
+      - 80:3000
     volumes:
       - ./metabase-data:/metabase-data
     environment:
@@ -71,48 +71,48 @@ services:
       - postgres
 
   # Scheduling
-  airflow:
-    container_name: "digipro-analytics_airflow"
-    restart: "always"
-    image: puckel/docker-airflow:1.9.0-2
-    depends_on:
-      - postgres
-    env_file:
-      - ./config/airflow_container.env
-      - ./config/minio.env
-      - ./config/shared_database.env
-    volumes:
-      - ./shared/requirements.txt:/requirements.txt
-      - ./shared/dags/:/usr/local/airflow/dags
-    ports:
-      - 8080:8080
-    command: webserver
+#   airflow:
+#     container_name: "digipro-analytics_airflow"
+#     restart: "always"
+#     image: puckel/docker-airflow:1.9.0-2
+#     depends_on:
+#       - postgres
+#     env_file:
+#       - ./config/airflow_container.env
+#       - ./config/minio.env
+#       - ./config/shared_database.env
+#     volumes:
+#       - ./shared/requirements.txt:/requirements.txt
+#       - ./shared/dags/:/usr/local/airflow/dags
+#     ports:
+#       - 8080:8080
+#     command: webserver
 
   # Model Storage
-  minio:
-    container_name: "digipro-analytics_minio"
-    restart: "always"
-    image: minio/minio
-    env_file:
-        - ./config/minio.env
-    volumes:
-        - minio_volume:/data
-    ports:
-        - 9000:9000
-    command: server /data
+#   minio:
+#     container_name: "digipro-analytics_minio"
+#     restart: "always"
+#     image: minio/minio
+#     env_file:
+#         - ./config/minio.env
+#     volumes:
+#         - minio_volume:/data
+#     ports:
+#         - 9000:9000
+#     command: server /data
 
   # API
-  apistar:
-    container_name: "digipro-analytics_apistar"
-    restart: "always"
-    build: services/apistar
-    env_file:
-      - ./config/minio.env
-    volumes:
-      - ./services/apistar/api:/usr/src/app
-    ports:
-      - 8000:8000
-    command: gunicorn app:app -b 0.0.0.0:8000
+#   apistar:
+#     container_name: "digipro-analytics_apistar"
+#     restart: "always"
+#     build: services/apistar
+#     env_file:
+#       - ./config/minio.env
+#     volumes:
+#       - ./services/apistar/api:/usr/src/app
+#     ports:
+#       - 8000:8000
+#     command: gunicorn app:app -b 0.0.0.0:8000
 
   # Admin Overview
   portainer:
